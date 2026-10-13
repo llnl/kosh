@@ -191,12 +191,13 @@ class KoshStore(object):
         :param verbose_attributes: Should we print attribute values of over length 30?
         :type verbose_attributes: bool
         """
-        atexit.register(self._clean_up)
         from sina import connect as sina_connect
         from sina.utils import Negation
         if lock_strategy is None:
             lock_strategy = lock_strategies.NoLocking()
         self.lock_strategy = lock_strategy
+        self._closed = False
+        self._atexit_cleanup = None
         self.session_sort_by = session_sort_by
         self.session_sort_by_descending = session_sort_by_descending
         self.verbose_attributes = verbose_attributes
@@ -346,6 +347,10 @@ class KoshStore(object):
             for loader in ks:
                 loader.types[self._sources_type] = loader.types["file"]
             self.loaders[self._sources_type] = self.loaders["file"]
+            # Keep the shutdown hook tied to the live store instance so an
+            # explicit close can unregister it before interpreter teardown.
+            self._atexit_cleanup = self._clean_up
+            atexit.register(self._atexit_cleanup)
 
     @lock_strategies.lock_method
     def __enter__(self):
@@ -485,6 +490,16 @@ class KoshStore(object):
     @lock_strategies.lock_method
     def close(self):
         """closes store and sina related things"""
+        if self._closed:
+            return
+        self._closed = True
+        cleanup = self._atexit_cleanup
+        self._atexit_cleanup = None
+        try:
+            if cleanup is not None:
+                atexit.unregister(cleanup)
+        except Exception:
+            pass
         try:
             # We need to update the features
             recs = self.get_sina_records()

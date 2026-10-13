@@ -1,1 +1,1 @@
-current_version = "3.5"
+current_version = "3.6"

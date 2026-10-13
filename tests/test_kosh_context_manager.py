@@ -3,6 +3,7 @@ from koshbase import KoshTest
 import kosh
 import time
 import os
+from unittest.mock import patch
 
 
 def kosh_task(store_name):
@@ -43,6 +44,16 @@ class KoshTestDataset(KoshTest):
                 print("kosh", kosh_thread.result())
             store.close()
             os.remove(store_uri)
+
+    def test_close_unregisters_atexit_cleanup(self):
+        _, uri = self.connect()
+        store = kosh.connect(uri, delete_all_contents=True)
+        with patch("kosh.store.atexit.unregister") as unregister:
+            store.close()
+            store.close()
+        self.assertEqual(unregister.call_count, 1)
+        self.assertIs(unregister.call_args[0][0].__self__, store)
+        os.remove(store.db_uri)
 
     def test_edit_dataset_after_close(self):
         _, uri = self.connect()

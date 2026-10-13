@@ -33,13 +33,23 @@ Homepage = "https://github.com/LLNL/Kosh"
 [project.scripts]
 kosh = "kosh.cli:main"
 kosh_workflow = "kosh.workflow:main"
+mada-mcp-kosh = "kosh.mcp_server.server:main"
+
+[project.entry-points."mada_tools.extensions"]
+kosh = "kosh.mada_extension:get_extension_manifest"
+
+[project.optional-dependencies]
+mcp = [
+  "mada",
+  "mada-tools",
+]
 
 [tool.setuptools]
 include-package-data = true
 script-files = ["scripts/sbang"]
 
 [tool.setuptools.package-data]
-kosh = ["skills/*", "skills/**/*"]
+kosh = ["skills/*", "skills/**/*", "mcp_server/*.md"]
 
 [tool.setuptools.packages.find]
 where = ["."]

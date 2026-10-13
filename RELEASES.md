@@ -1,5 +1,6 @@
 # Release Notes
 
+* [3.6](#36-release)    
 * [3.5](#35-release)
 * [3.4](#34-release)
 * [3.3.1](#331-release)
@@ -18,6 +19,28 @@
 * [0.8](#08-release)
 
 
+## 3.6 Release
+
+### Description
+
+This minor release adds an MCP (Model Context Protocol) server for Kosh.
+
+### New in this release    
+
+The Kosh MCP server is built as an extension of the mada-tools server suite. It lets AI agents and agentic workflows query, access, and update objects in Kosh stores through standard MCP tool calls with no custom glue code.
+Tools:
+    * Store connection: connect to a Kosh store
+    * Find: search for datasets, ensembles, and other objects
+    * Create: create datasets or ensembles
+    * Associate/dissociate: attach file to, or detach them from, datasets
+    * Update: modify datasets, ensembles, or source records
+    * Load: list, describe, or load feature data from a dataset
+    * Transform: apply Kosh transformers or operators
+    * Import/export: import native Kosh export files, or export datasets and ensembles
+    * Dataframe: preview or save Kosh dataframe output
+    * Add curve: add curve data to a dataset
+    * Delete: remove objects from a store    
+    
 ## 3.5 Release
 
 ### Description

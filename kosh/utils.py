@@ -1,5 +1,6 @@
 from __future__ import absolute_import
 import collections
+import importlib.metadata
 import os
 import time
 from datetime import datetime
@@ -558,10 +559,9 @@ def version(comparable=False):
     :returns: version string or tuple
     :rtype: str or tuple
     """
-    import pkg_resources
     try:
-        __version__ = pkg_resources.get_distribution("kosh").version
-    except Exception:
+        __version__ = importlib.metadata.version("kosh")
+    except importlib.metadata.PackageNotFoundError:
         __version__ = "0.0"
     if comparable:
         tuple_version = ()

@@ -35,6 +35,9 @@ For more details look into the [installation doc](INSTALL.md)
 
 If you want to use Kosh through Codex, see [the Codex skill install guide](docs/codex_skill.md).
 
+If you want to use Kosh from a MADA agent or another MCP-compatible client,
+see the [Kosh MCP server guide](docs/source/users/mcp_server.md).
+
 # First steps
 
 See [this file](docs/source/users/index.md)
